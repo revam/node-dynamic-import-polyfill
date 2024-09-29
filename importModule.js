@@ -22,12 +22,12 @@ export function importModule(url) {
       reject(new Error(`Failed to import: ${url}`));
       destructor();
     };
-    script.onload = () => {
-      resolve(window[vector]);
+    window[vector] = (value) => {
+      resolve(value);
       destructor();
     };
     const absURL = toAbsoluteURL(url);
-    const loader = `import * as m from "${absURL}"; window.${vector} = m;`; // export Module
+    const loader = `import * as m from "${absURL}"; window.${vector}(m);`; // export Module
     const blob = new Blob([loader], { type: "text/javascript" });
     script.src = URL.createObjectURL(blob);
 
